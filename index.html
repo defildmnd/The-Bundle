@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Svens Productivity Suite</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #f6f7fb;
+      --text: #0d0e10;
+      --muted: #5b6170;
+      --card: #ffffff;
+      --radius: 18px;
+      --shadow-sm: 0 6px 16px rgba(20, 23, 31, 0.06);
+      --shadow-md: 0 10px 30px rgba(20, 23, 31, 0.10);
+      --shadow-lg: 0 16px 55px rgba(20, 23, 31, 0.16);
+      --ring: 0 0 0 8px rgba(0,0,0,0.04);
+      --accent-1-a: #00DBDE; --accent-1-b: #FC00FF;
+      --accent-2-a: #FF9A9E; --accent-2-b: #FAD0C4;
+      --accent-3-a: #A18CD1; --accent-3-b: #FBC2EB;
+      --accent-4-a: #F6D365; --accent-4-b: #FDA085;
+    }
+
+    *{ box-sizing: border-box; }
+    html, body{ height: 100%; }
+    body{
+      margin: 0;
+      font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: radial-gradient(1200px 800px at 80% -10%, #eef1ff 0%, transparent 60%),
+                  radial-gradient(900px 600px at -10% 20%, #f4fffd 0%, transparent 55%),
+                  var(--bg);
+      color: var(--text);
+    }
+
+    .wrap{
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 56px 20px 72px;
+    }
+
+    .brand{
+      display: grid;
+      justify-items: center;
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+    .logo{
+      width: 88px; height: 88px;
+      display: grid; place-items: center;
+      border-radius: 22px;
+      background: #000;
+      box-shadow: var(--shadow-md);
+    }
+    .title{
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      font-size: clamp(22px, 4vw, 34px);
+      text-align: center;
+    }
+    .subtitle{
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .grid{
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 22px;
+    }
+
+    /* Tile */
+    .tile{
+      text-decoration: none;
+      color: inherit;
+      display: grid;
+      gap: 10px;
+      outline: none;
+    }
+
+    .card{
+      position: relative;
+      background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.86));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      padding: 22px;
+      height: 180px;
+      display: grid;
+      align-content: end;
+      isolation: isolate;
+      transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s cubic-bezier(.2,.7,.2,1);
+    }
+    .tile:focus .card{
+      box-shadow: var(--shadow-md), var(--ring);
+    }
+    .tile:hover .card{
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .card::before{
+      content: "";
+      position: absolute; inset: -1px;
+      background:
+        radial-gradient(220px 120px at 15% 0%, rgba(255,255,255,.55), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.2), rgba(255,255,255,0));
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .shape{
+      position: absolute;
+      top: 18px; left: 18px;
+      width: 40px; height: 40px;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,.12));
+      transition: transform .45s cubic-bezier(.18,.76,.2,1);
+      z-index: 1;
+    }
+    .tile:hover .shape{ transform: translateY(-2px) scale(1.03) rotate(-2deg); }
+
+    .card-label{
+      position: relative;
+      z-index: 1;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      font-size: 16px;
+    }
+
+    .overlay{
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0) 10%, rgba(15,17,22,0.82) 75%);
+      opacity: 0;
+      transition: opacity .35s ease;
+      display: grid;
+      align-items: end;
+      padding: 18px;
+      z-index: 2;
+      color: #fff;
+      backdrop-filter: blur(1px);
+    }
+    .tile:hover .overlay{ opacity: 1; }
+    .overlay p{
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      font-size: 14px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.35);
+    }
+
+    .caption{
+      font-size: 14px;
+      color: var(--muted);
+      margin: 0 4px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    @media (hover: none){
+      .overlay{ opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="brand">
+      <div class="logo" aria-hidden="true">
+        <svg viewBox="0 0 64 64">
+          <rect x="0" y="0" width="64" height="64" rx="14" fill="#000"/>
+          <path d="M18,24c0-5.5,4.5-10,10-10h10c5.5,0,10,4.5,10,10c0,4-2.4,7.6-6.1,9.2l-16.7,7.2
+                   c-2.9,1.2-4.9,4.1-4.9,7.3c0,4.4,3.6,8,8,8h9"
+                fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h1 class="title">Svens Productivity Suite</h1>
+      <p class="subtitle">Schnell zugreifen. Klar strukturiert. Elegant animiert.</p>
+    </header>
+
+    <section class="grid">
+      <!-- 1 -->
+      <a href="https://defoloto-dev.github.io/my-typingweb-app/" class="tile" target="_blank">
+        <div class="card">
+          <div class="shape">
+            <svg viewBox="0 0 64 64">
+              <defs><linearGradient id="grad-square" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="var(--accent-1-a)"/>
+                <stop offset="100%" stop-color="var(--accent-1-b)"/>
+              </linearGradient></defs>
+              <rect x="6" y="6" width="52" height="52" rx="10" fill="url(#grad-square)"/>
+            </svg>
+          </div>
+          <div class="overlay"><p>Schneller. Präziser. Tippen.</p></div>
+          <div class="card-label">Typing Practice</div>
+        </div>
+        <p class="caption">Typing Practice</p>
+      </a>
+
+      <!-- 2 -->
+      <a href="https://defoloto-dev.github.io/My-Exam-Prediction/" class="tile" target="_blank">
+        <div class="card">
+          <div class="shape">
+            <svg viewBox="0 0 64 64">
+              <defs><linearGradient id="grad-triangle" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="var(--accent-2-a)"/>
+                <stop offset="100%" stop-color="var(--accent-2-b)"/>
+              </linearGradient></defs>
+              <polygon points="32,6 58,58 6,58" fill="url(#grad-triangle)" />
+            </svg>
+          </div>
+          <div class="overlay"><p>Daten. Muster. Prognosen.</p></div>
+          <div class="card-label">Exam Prediction</div>
+        </div>
+        <p class="caption">Exam Prediction</p>
+      </a>
+
+      <!-- 3 -->
+      <a href="https://defildmnd.github.io/MyDecisionMatrix/" class="tile" target="_blank">
+        <div class="card">
+          <div class="shape">
+            <svg viewBox="0 0 64 64">
+              <defs><radialGradient id="grad-circle" cx="35%" cy="30%" r="80%">
+                <stop offset="0%" stop-color="var(--accent-3-b)"/>
+                <stop offset="100%" stop-color="var(--accent-3-a)"/>
+              </radialGradient></defs>
+              <circle cx="32" cy="32" r="24" fill="url(#grad-circle)" />
+            </svg>
+          </div>
+          <div class="overlay"><p>Werten. Vergleichen. Entscheiden.</p></div>
+          <div class="card-label">Decision Tool</div>
+        </div>
+        <p class="caption">Decision Tool</p>
+      </a>
+
+      <!-- 4 -->
+      <a href="https://defoloto-dev.github.io/KI_Todoliste/" class="tile" target="_blank">
+        <div class="card">
+          <div class="shape">
+            <svg viewBox="0 0 64 64">
+              <defs><linearGradient id="grad-hex" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="var(--accent-4-a)"/>
+                <stop offset="100%" stop-color="var(--accent-4-b)"/>
+              </linearGradient></defs>
+              <polygon points="32,6 54,18 54,46 32,58 10,46 10,18" fill="url(#grad-hex)" />
+            </svg>
+          </div>
+          <div class="overlay"><p>KI. Aufgaben. Erledigt.</p></div>
+          <div class="card-label">AI Todoliste</div>
+        </div>
+        <p class="caption">AI Todoliste</p>
+      </a>
+    </section>
+  </main>
+</body>
+</html>
